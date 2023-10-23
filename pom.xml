@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>world.zmxl</groupId>
+        <artifactId>xianlu-root</artifactId>
+        <version>1.0.1</version>
+    </parent>
+
+    <artifactId>account-demo</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>account-application</module>
+        <module>account-domain</module>
+        <module>account-infrastructure</module>
+        <module>account-trigger</module>
+        <module>account-types</module>
+    </modules>
+
+    <properties>
+        <revision>1.0-SNAPSHOT</revision>
+
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>world.zmxl</groupId>
+                <artifactId>account-application</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>world.zmxl</groupId>
+                <artifactId>account-domain</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>world.zmxl</groupId>
+                <artifactId>account-infrastructure</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>world.zmxl</groupId>
+                <artifactId>account-trigger</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>world.zmxl</groupId>
+                <artifactId>account-types</artifactId>
+                <version>${revision}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <!-- manifest.mf是否添加默认参数 -->
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <!-- 控制写入manifest.mf内容 -->
+                        <manifestEntries>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <Build-User>${git.build.user.email}</Build-User>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <Build-Time>${git.build.time}</Build-Time>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <Git-Branch>${git.branch}</Git-Branch>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <Git-Commit-Id>${git.commit.id}</Git-Commit-Id>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <Git-Commit-Time>${git.commit.time}</Git-Commit-Time>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.2.6</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    <prefix>git</prefix>
+                    <verbose>true</verbose>
+                    <dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
+                    <!-- 是否生 git.properties 属性文件 -->
+                    <generateGitPropertiesFile>false</generateGitPropertiesFile>
+                    <!-- 生成版本信息文件名 -->
+                    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties
+                    </generateGitPropertiesFilename>
+                    <format>json</format>
+                    <!-- git描述配置,可选;由JGit提供实现 -->
+                    <gitDescribe>
+                        <!-- 是否生成描述属性 -->
+                        <skip>false</skip>
+                        <!-- 提交操作未发现tag时,仅打印提交操作ID -->
+                        <always>false</always>
+                        <!-- 提交操作ID显式字符长度,最大值为:40;默认值:7; 0代表特殊意义;后面有解释; -->
+                        <abbrev>7</abbrev>
+                        <!-- 构建触发时,代码有修改时(即"dirty state"),添加指定后缀;默认值:""; -->
+                        <dirty>-dirty</dirty>
+                    </gitDescribe>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <!--在项目根目录下执行以下命令即可修改版本号-->
+            <!--mvn versions:set -DnewVersion=2.3.0-1.1-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <!-- 避免IDE将 .flattened-pom.xml 自动识别为功能模块 -->
+                    <flattenedPomFilename>pom-xml-flattened</flattenedPomFilename>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
