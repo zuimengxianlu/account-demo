@@ -7,10 +7,9 @@
         <groupId>world.zmxl</groupId>
         <artifactId>account-demo</artifactId>
         <version>${revision}</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>account-trigger</artifactId>
+    <artifactId>account-util</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -22,29 +21,28 @@
         <!-- account demo project start -->
         <dependency>
             <groupId>world.zmxl</groupId>
-            <artifactId>account-domain</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>world.zmxl</groupId>
             <artifactId>account-types</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>world.zmxl</groupId>
-            <artifactId>account-util</artifactId>
         </dependency>
         <!-- account demo project end -->
 
-        <!-- spring start -->
+        <!-- tools start -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
         </dependency>
-        <!-- spring end -->
-
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+        <!-- tools end -->
     </dependencies>
 
 </project>

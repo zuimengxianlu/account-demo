@@ -20,6 +20,8 @@
         <module>account-infrastructure</module>
         <module>account-trigger</module>
         <module>account-types</module>
+        <module>account-api</module>
+        <module>account-util</module>
     </modules>
 
     <properties>
@@ -29,10 +31,23 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <redisson.version>3.15.3</redisson.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-annotation</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>world.zmxl</groupId>
                 <artifactId>account-application</artifactId>
@@ -55,7 +70,17 @@
             </dependency>
             <dependency>
                 <groupId>world.zmxl</groupId>
+                <artifactId>account-api</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>world.zmxl</groupId>
                 <artifactId>account-types</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>world.zmxl</groupId>
+                <artifactId>account-util</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

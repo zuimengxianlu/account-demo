@@ -18,4 +18,28 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <!-- account demo project start -->
+        <dependency>
+            <groupId>world.zmxl</groupId>
+            <artifactId>account-types</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>world.zmxl</groupId>
+            <artifactId>account-util</artifactId>
+        </dependency>
+        <!-- account demo project end -->
+
+        <!-- spring start -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+        <!-- spring end -->
+    </dependencies>
+
 </project>

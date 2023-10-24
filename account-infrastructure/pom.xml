@@ -18,4 +18,28 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+
+        <!-- account demo project start -->
+        <dependency>
+            <groupId>world.zmxl</groupId>
+            <artifactId>account-domain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>world.zmxl</groupId>
+            <artifactId>account-types</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>world.zmxl</groupId>
+            <artifactId>account-util</artifactId>
+        </dependency>
+        <!-- account demo project end -->
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+
+    </dependencies>
+
 </project>

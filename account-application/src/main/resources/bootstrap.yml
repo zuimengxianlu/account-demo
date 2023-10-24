@@ -1,0 +1,14 @@
+server:
+  port: 20001
+
+spring:
+  application:
+    name: account-demo
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ??
+        namespace: ??
+      config:
+        server-addr: ??
+        namespace: ??
