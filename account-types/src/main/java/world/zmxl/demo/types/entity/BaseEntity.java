@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,6 +17,9 @@ import java.util.Date;
  */
 @NoArgsConstructor
 public class BaseEntity implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 4716486630504822954L;
 
     @Getter
     @TableId(value = "id", type = IdType.AUTO)
