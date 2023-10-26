@@ -2,6 +2,7 @@ package world.zmxl.demo.infrastructure.repository;
 
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Repository;
+import world.zmxl.demo.domain.user.model.entity.UserInfo;
 import world.zmxl.demo.domain.user.repository.IUserRepository;
 import world.zmxl.demo.infrastructure.dao.IUserDao;
 
@@ -17,4 +18,8 @@ public class UserRepository implements IUserRepository {
     @Resource(type = IUserDao.class)
     private IUserDao userDao;
 
+    @Override
+    public UserInfo selectUserInfo(Long uid) {
+        return null;
+    }
 }

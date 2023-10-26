@@ -1,5 +1,7 @@
 package world.zmxl.demo.domain.user.service;
 
+import world.zmxl.demo.domain.user.model.valobj.UserInfoVO;
+
 /**
  * 类的介绍
  *
@@ -7,4 +9,7 @@ package world.zmxl.demo.domain.user.service;
  * @date 2023/10/24
  */
 public interface IUserService {
+
+    UserInfoVO getUserInfo(Long uid);
+
 }

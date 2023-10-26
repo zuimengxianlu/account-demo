@@ -1,5 +1,7 @@
 package world.zmxl.demo.domain.user.repository;
 
+import world.zmxl.demo.domain.user.model.entity.UserInfo;
+
 /**
  * 接口的介绍
  *
@@ -7,4 +9,7 @@ package world.zmxl.demo.domain.user.repository;
  * @date 2023/10/24
  */
 public interface IUserRepository {
+
+    UserInfo selectUserInfo(Long uid);
+
 }
