@@ -1,5 +1,6 @@
 package world.zmxl.demo.types.response;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,13 +31,17 @@ public class Result<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = -1595321021075146012L;
 
-    private Integer code;
+    private Integer code = 200;
 
     private String msg;
 
     private T data;
 
     private List<String> errorMsgStack;
+
+    public boolean isSuccess() {
+        return code == 200;
+    }
 
     public static <T> Result<T> success() {
         return Result.<T>builder().code(200).msg("访问成功").build();
@@ -52,6 +57,10 @@ public class Result<T> implements Serializable {
 
     public static <T> Result<T> error(String msg) {
         return Result.<T>builder().code(400).msg(msg).build();
+    }
+
+    public static <T> Result<T> error(String template, Object... params) {
+        return Result.<T>builder().code(400).msg(StrUtil.format(template, params)).build();
     }
 
     public static <T> Result<T> error(String msg, Throwable e) {

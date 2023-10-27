@@ -1,27 +1,23 @@
-package world.zmxl.demo.infrastructure.entity;
+package world.zmxl.demo.domain.account.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import world.zmxl.demo.types.entity.BaseEntity;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 类的介绍
  *
  * @author 醉梦仙露
- * @date 2023/10/24
+ * @date 2023/10/27
  */
-@TableName(value = "account")
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class Account extends BaseEntity {
+public class Account implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -6210123120550908935L;
+    private static final long serialVersionUID = -5192514685714575732L;
 
     /**
      * 余额
@@ -37,6 +33,6 @@ public class Account extends BaseEntity {
      * 是否锁定
      */
     @NotNull(message = "[是否锁定]不能为空")
-    private Integer isLocked;
+    private boolean locked;
 
 }

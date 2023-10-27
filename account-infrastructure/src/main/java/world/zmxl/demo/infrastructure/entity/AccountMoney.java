@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import world.zmxl.demo.types.entity.BaseEntity;
 
 import java.io.Serial;
+import java.math.BigDecimal;
 
 /**
  * 类的介绍
@@ -38,7 +39,7 @@ public class AccountMoney extends BaseEntity {
      * 余额
      */
     @NotNull(message = "[余额]不能为空")
-    private Integer balance;
+    private BigDecimal balance;
 
     /**
      * 来源类型
