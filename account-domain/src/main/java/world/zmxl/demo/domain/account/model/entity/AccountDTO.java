@@ -1,7 +1,10 @@
 package world.zmxl.demo.domain.account.model.entity;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,7 +17,10 @@ import java.math.BigDecimal;
  * @date 2023/10/27
  */
 @Data
-public class Account implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class AccountDTO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -5192514685714575732L;

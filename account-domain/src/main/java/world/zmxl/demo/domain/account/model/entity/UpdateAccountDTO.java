@@ -1,29 +1,30 @@
-package world.zmxl.demo.infrastructure.entity;
+package world.zmxl.demo.domain.account.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
-import world.zmxl.demo.types.entity.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import world.zmxl.demo.types.enm.AccountMoneySourceType;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * 类的介绍
  *
  * @author 醉梦仙露
- * @date 2023/10/24
+ * @date 2023/10/28
  */
-@TableName(value = "account_money")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class AccountMoney extends BaseEntity {
+public class UpdateAccountDTO implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -3003477620288854793L;
+    private static final long serialVersionUID = 6385167502851488664L;
 
     /**
      * 用户编号
@@ -47,11 +48,13 @@ public class AccountMoney extends BaseEntity {
      * 来源类型
      */
     @NotNull(message = "[来源类型]不能为空")
-    private Integer sourceType;
+    private AccountMoneySourceType sourceType;
+
     /**
      * 来源主体内容
      */
     private String sourceBody;
+
     /**
      * 来源编号
      */

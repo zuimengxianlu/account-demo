@@ -10,7 +10,9 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import world.zmxl.demo.domain.account.model.entity.Account;
+import world.zmxl.demo.domain.account.model.entity.AccountDTO;
+import world.zmxl.demo.domain.account.model.entity.AccountMoneyDTO;
+import world.zmxl.demo.domain.account.model.entity.UpdateAccountDTO;
 import world.zmxl.demo.domain.account.model.valobj.AccountTransferVO;
 import world.zmxl.demo.domain.account.model.valobj.QueryAccountMoneyVO;
 import world.zmxl.demo.domain.account.repository.IAccountRepository;
@@ -20,6 +22,7 @@ import world.zmxl.demo.domain.user.repository.IUserRepository;
 import world.zmxl.demo.types.constant.LockConstants;
 import world.zmxl.demo.types.enm.AccountMoneySourceType;
 import world.zmxl.demo.types.exception.AcquireLockException;
+import world.zmxl.demo.types.exception.ApiException;
 import world.zmxl.demo.types.response.PagingResult;
 import world.zmxl.demo.types.response.Result;
 import world.zmxl.demo.types.response.data.PagingData;
@@ -63,41 +66,42 @@ public class AccountServiceImpl implements IAccountService, LockConstants {
 
     }
 
-    private Result<BigDecimal> checkUserAndAccountIsAvailableAndReturnBalance(@NonNull Long uid, @NotNull CheckMsgTemplate template) {
+    private AccountDTO checkUserAndAccountIsAvailableAndReturnBalance(@NonNull Long uid, @NotNull CheckMsgTemplate template) {
         // 1. 获取用户信息，不存在则提示无该用户信息
         UserInfo userInfo = userRepository.selectUserInfo(uid);
         if (userInfo == null) {
-            return Result.error(template.arg0, uid);
+            throw new ApiException(template.arg0, uid);
         }
 
         // 2. 获取账户信息，不存在则提示未开户，存在且锁定则提示待激活
-        Account account = accountRepository.selectUserAccount(uid);
+        AccountDTO account = accountRepository.selectUserAccount(uid);
         if (account == null) {
-            return Result.error(template.arg1, userInfo.getName());
+            throw new ApiException(template.arg1, userInfo.getName());
         }
 
         if (account.isLocked()) {
-            return Result.error(template.arg2, userInfo.getName());
+            throw new ApiException(template.arg2, userInfo.getName());
         }
 
-        return Result.success(account.getBalance());
+        return account;
     }
 
     @Override
     public Result<BigDecimal> getAccount(Long uid) {
         // 1. 2. 3. 返回账户余额
-        return checkUserAndAccountIsAvailableAndReturnBalance(uid, CheckMsgTemplate.DEFAULT);
+        return Result.success(checkUserAndAccountIsAvailableAndReturnBalance(uid, CheckMsgTemplate.DEFAULT).getBalance());
     }
 
     @Override
-    public Result<PagingData<?>> showAccountMoney(QueryAccountMoneyVO queryParams) {
+    public Result<PagingData<AccountMoneyDTO>> showAccountMoney(QueryAccountMoneyVO queryParams) {
         // 1. 获取用户信息，不存在则提示无该用户信息
-
         // 2. 获取账户信息，不存在则提示未开户，存在且锁定则提示待激活
+        checkUserAndAccountIsAvailableAndReturnBalance(queryParams.getUid(), CheckMsgTemplate.DEFAULT);
 
         // 3. 根据查询条件筛选账户明细并返回
+        PagingData<AccountMoneyDTO> res = accountRepository.selectUserAccountMoney(queryParams);
 
-        return PagingResult.success();
+        return PagingResult.success(res);
     }
 
     @Override
@@ -110,13 +114,11 @@ public class AccountServiceImpl implements IAccountService, LockConstants {
             lock(body.getUid(), locks);
             // 1. 获取转出用户信息，不存在则提示无该用户信息
             // 2. 获取转出账户信息，不存在则提示未开户，存在且锁定则提示待激活
-            Result<BigDecimal> checkRes = checkUserAndAccountIsAvailableAndReturnBalance(body.getUid(), CheckMsgTemplate.DEFAULT);
+            AccountDTO account = checkUserAndAccountIsAvailableAndReturnBalance(body.getUid(), CheckMsgTemplate.DEFAULT);
 
-            if (!checkRes.isSuccess()) {
-                return checkRes;
-            }
             // 3. 余额验证
-            if (checkRes.getData().subtract(body.getAmount()).compareTo(BigDecimal.ZERO) < 0) {
+            BigDecimal sourceBalance = account.getBalance().subtract(body.getAmount());
+            if (sourceBalance.compareTo(BigDecimal.ZERO) < 0) {
                 return Result.error("余额不足");
             }
             // lock target user and target user account
@@ -124,17 +126,27 @@ public class AccountServiceImpl implements IAccountService, LockConstants {
             // 4. 获取转入账户信息，不存在则提示无该用户信息
             // 5. 获取转入账户信息，不存在则提示未开户，存在且锁定则提示待激活
 
-            checkRes = checkUserAndAccountIsAvailableAndReturnBalance(body.getTargetUid(), CheckMsgTemplate.TRANSFER);
-
-            if (!checkRes.isSuccess()) {
-                return checkRes;
-            }
+            AccountDTO targetAccount = checkUserAndAccountIsAvailableAndReturnBalance(body.getTargetUid(), CheckMsgTemplate.TRANSFER);
 
             // 6. 转出账户移除对应金额
-            accountRepository.updateBalance(body.getUid(), body.getAmount(), AccountMoneySourceType.TRANSFER_OUT);
+            UpdateAccountDTO dto = UpdateAccountDTO.builder()
+                    .uid(body.getUid())
+                    .money(body.getAmount())
+                    .balance(sourceBalance)
+                    .sourceId(body.getTargetUid())
+                    .sourceType(AccountMoneySourceType.TRANSFER_OUT)
+                    .sourceBody(AccountMoneySourceType.TRANSFER_OUT.getSourceBody()).build();
+            accountRepository.updateBalance(dto);
 
             // 7. 转入账户移除对应金额
-            accountRepository.updateBalance(body.getTargetUid(), body.getAmount(), AccountMoneySourceType.TRANSFER_IN);
+            dto = UpdateAccountDTO.builder()
+                    .uid(body.getTargetUid())
+                    .money(body.getAmount())
+                    .balance(targetAccount.getBalance().add(body.getAmount()))
+                    .sourceId(body.getUid())
+                    .sourceType(AccountMoneySourceType.TRANSFER_IN)
+                    .sourceBody(AccountMoneySourceType.TRANSFER_IN.getSourceBody()).build();
+            accountRepository.updateBalance(dto);
 
         }
         catch (InterruptedException e) {

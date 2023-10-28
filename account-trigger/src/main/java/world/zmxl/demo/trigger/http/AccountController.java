@@ -2,6 +2,7 @@ package world.zmxl.demo.trigger.http;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+import world.zmxl.demo.domain.account.model.entity.AccountMoneyDTO;
 import world.zmxl.demo.domain.account.model.valobj.AccountTransferVO;
 import world.zmxl.demo.domain.account.model.valobj.QueryAccountMoneyVO;
 import world.zmxl.demo.domain.account.service.IAccountService;
@@ -29,7 +30,7 @@ public class AccountController {
     }
 
     @GetMapping("/v1/account-money")
-    private Result<PagingData<?>> showAccountMoney(QueryAccountMoneyVO queryParams) {
+    private Result<PagingData<AccountMoneyDTO>> showAccountMoney(QueryAccountMoneyVO queryParams) {
         return accountService.showAccountMoney(queryParams);
     }
 

@@ -1,10 +1,11 @@
 package world.zmxl.demo.domain.account.repository;
 
 import org.springframework.transaction.annotation.Transactional;
-import world.zmxl.demo.domain.account.model.entity.Account;
-import world.zmxl.demo.types.enm.AccountMoneySourceType;
-
-import java.math.BigDecimal;
+import world.zmxl.demo.domain.account.model.entity.AccountDTO;
+import world.zmxl.demo.domain.account.model.entity.AccountMoneyDTO;
+import world.zmxl.demo.domain.account.model.entity.UpdateAccountDTO;
+import world.zmxl.demo.domain.account.model.valobj.QueryAccountMoneyVO;
+import world.zmxl.demo.types.response.data.PagingData;
 
 /**
  * 接口的介绍
@@ -14,8 +15,11 @@ import java.math.BigDecimal;
  */
 public interface IAccountRepository {
 
-    Account selectUserAccount(Long uid);
+    AccountDTO selectUserAccount(Long uid);
 
     @Transactional(rollbackFor = Exception.class)
-    void updateBalance(Long uid, BigDecimal amount, AccountMoneySourceType accountMoneySourceType);
+    void updateBalance(UpdateAccountDTO dto);
+
+    PagingData<AccountMoneyDTO> selectUserAccountMoney(QueryAccountMoneyVO queryParams);
+
 }

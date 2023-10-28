@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.PrintWriter;
 import java.io.Serial;
@@ -25,7 +24,6 @@ import java.util.StringTokenizer;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Slf4j
 public class Result<T> implements Serializable {
 
     @Serial
