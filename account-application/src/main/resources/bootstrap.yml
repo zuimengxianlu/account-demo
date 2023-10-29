@@ -7,8 +7,20 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: ??
-        namespace: ??
+        server-addr: ${SERVICE_DISCOVERY_SERVER:http://127.0.0.1:8848}
+        namespace: ${SERVICE_DISCOVERY_NAMESPACE:public}
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:nacos}
       config:
-        server-addr: ??
-        namespace: ??
+        server-addr: ${SERVICE_CONFIG_SERVER:http://127.0.0.1:8848}
+        namespace: ${SERVICE_CONFIG_NAMESPACE:public}
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:nacos}
+        # NACOS.USERNAME
+        file-extension: yml
+        extension-configs:
+          - data-id: application-public.yml
+            refresh: true
+logging:
+  level:
+    world.zmxl.demo: debug

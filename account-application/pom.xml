@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>account-application</artifactId>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -52,6 +53,10 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
         <!-- spring end -->
 
@@ -96,5 +101,50 @@
         </dependency>
         <!-- account demo project end -->
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>world.zmxl.demo.app.MainApplication</mainClass>
+                    <skip>true</skip>
+                    <layout>JAR</layout>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <from>
+                        <image>
+                            swr.cn-east-3.myhuaweicloud.com/private-default/service/service-jdk-17:1.0.0
+                        </image>
+                    </from>
+                    <to>
+                        <image>
+                            swr.cn-east-3.myhuaweicloud.com/private-default/${project.parent.artifactId}:${revision}
+                        </image>
+                    </to>
+                    <container>
+                        <mainClass>world.zmxl.demo.app.MainApplication</mainClass>
+                        <jvmFlags>
+                            <jvmFlag>-Djava.security.egd=file:/dev/./urandom</jvmFlag>
+                            <jvmFlag>-Duser.timezone=GMT+08</jvmFlag>
+                            <jvmFlag>-Dfile.encoding=UTF-8</jvmFlag>
+                            <jvmFlag>-Xms300m</jvmFlag>
+                            <jvmFlag>-Xmx300m</jvmFlag>
+                        </jvmFlags>
+                        <ports>
+                            <prot>20001</prot>
+                        </ports>
+                        <format>Docker</format>
+                    </container>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

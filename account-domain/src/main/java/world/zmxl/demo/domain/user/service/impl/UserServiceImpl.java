@@ -23,7 +23,11 @@ public class UserServiceImpl implements IUserService {
     public UserInfoVO getUserInfo(Long uid) {
         UserInfo userInfo = userRepository.selectUserInfo(uid);
         UserInfoVO userInfoVO = new UserInfoVO();
-        // TODO entity to vo
+        userInfoVO.setUid(userInfo.getUid());
+        userInfoVO.setName(userInfo.getName());
+        userInfoVO.setPhone(userInfo.getPhone());
+        userInfoVO.setPassword(userInfo.getPassword());
+        userInfoVO.setEmail(userInfo.getEmail());
         return userInfoVO;
     }
 }

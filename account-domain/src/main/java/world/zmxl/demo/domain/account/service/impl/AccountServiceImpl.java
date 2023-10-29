@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2023/10/24
  */
 @Service
-public class AccountServiceImpl implements IAccountService, LockConstants {
+public class AccountServiceImpl implements IAccountService {
 
     @Resource(type = IAccountRepository.class)
     private IAccountRepository accountRepository;
@@ -163,8 +163,8 @@ public class AccountServiceImpl implements IAccountService, LockConstants {
     }
 
     private void lock(Long uid, List<RLock> locks) throws InterruptedException {
-        RLock targetAccountLock = redissonClient.getLock(StrUtil.format(LOCK_ACCOUNT, uid));
-        RLock targetUserLock = redissonClient.getLock(StrUtil.format(LOCK_USER, uid));
+        RLock targetAccountLock = redissonClient.getLock(StrUtil.format(LockConstants.LOCK_ACCOUNT, uid));
+        RLock targetUserLock = redissonClient.getLock(StrUtil.format(LockConstants.LOCK_USER, uid));
         if (!targetAccountLock.tryLock(5, TimeUnit.SECONDS)) {
             throw new AcquireLockException(targetAccountLock.getName());
         }

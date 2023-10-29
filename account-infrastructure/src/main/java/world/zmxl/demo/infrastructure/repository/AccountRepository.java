@@ -44,7 +44,7 @@ public class AccountRepository implements IAccountRepository, CacheKeyConstants 
         Account account = accountDao.selectOne(Wrappers.lambdaQuery(Account.class)
                 .eq(Account::getUid, uid));
 
-        return AccountDTO.builder()
+        return account == null ? null : AccountDTO.builder()
                 .uid(account.getUid())
                 .balance(account.getBalance())
                 .locked(BooleanEnum.isTrue(account.getIsLocked()))

@@ -2,7 +2,10 @@ package world.zmxl.demo.domain.user.model.entity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import java.io.Serial;
@@ -15,6 +18,9 @@ import java.io.Serializable;
  * @date 2023/10/25
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserInfo implements Serializable {
 
     @Serial

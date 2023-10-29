@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import world.zmxl.demo.domain.user.model.entity.UserInfo;
 import world.zmxl.demo.domain.user.repository.IUserRepository;
 import world.zmxl.demo.infrastructure.dao.IUserDao;
+import world.zmxl.demo.infrastructure.entity.User;
 
 /**
  * 类的介绍
@@ -20,6 +21,11 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public UserInfo selectUserInfo(Long uid) {
-        return null;
+        User user = userDao.selectById(uid);
+        return user == null ? null : UserInfo.builder()
+                .uid(uid)
+                .phone(user.getPhone())
+                .email(user.getEmail())
+                .build();
     }
 }
