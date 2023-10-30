@@ -21,6 +21,3 @@ spring:
         extension-configs:
           - data-id: application-public.yml
             refresh: true
-logging:
-  level:
-    world.zmxl.demo: debug
