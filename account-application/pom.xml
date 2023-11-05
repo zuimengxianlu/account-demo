@@ -138,6 +138,9 @@
                         <image>
                             swr.cn-east-3.myhuaweicloud.com/private-default/${project.parent.artifactId}:${revision}
                         </image>
+                        <tags>
+                            <tag>latest</tag>
+                        </tags>
                     </to>
                     <container>
                         <mainClass>world.zmxl.demo.app.MainApplication</mainClass>
